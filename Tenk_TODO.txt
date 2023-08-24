@@ -5,6 +5,3 @@
 - rules box
 - style creation screen
 - "roll" animation (rando numbers like in cpp class)
-- play again
-
-- for same players, save to local storage, reload site, retrieve and then delete from local storage
