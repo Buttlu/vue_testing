@@ -29,9 +29,6 @@ import HelloWorld from './components/HelloWorld.vue'
           <RouterLink to="/dragtest">Drag Test</RouterLink>
         </div>
         <div class="routerlink">
-          <RouterLink to="/donkey">Donkey</RouterLink>
-        </div>
-        <div class="routerlink">
           <RouterLink to="/tenk">10'000</RouterLink>
         </div>
       </nav>

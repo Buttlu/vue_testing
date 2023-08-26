@@ -44,11 +44,6 @@ const router = createRouter({
       component: () => import('../views/DraggableView.vue')
     },
     {
-      path: '/donkey',
-      name: 'donkey',
-      component: () => import('../views/DonkeyView.vue')
-    },
-    {
       path: '/tenk',
       name: 'tenk',
       component: () => import('../views/TenkView.vue')
