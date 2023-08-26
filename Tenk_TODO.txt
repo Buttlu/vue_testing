@@ -1,4 +1,0 @@
-- auto claim dice (maybe move them up claimed or change box-shadow color)
-    sol:
-        - count number of rerolls and compare with last roll, if they're the same, deny the new
-        - check which numbers won and use them to disable the dice

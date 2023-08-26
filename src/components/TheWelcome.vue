@@ -4,6 +4,12 @@ import WelcomeItem from './WelcomeItem.vue'
 
 <template>
   <WelcomeItem>
+    <template #icon />
+    <template #heading />
+    This is just a personal project to learn and experiment with the vue framework. The different pages may not be 
+    the most interesting or fully functional.
+  </WelcomeItem>
+  <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
     </template>
