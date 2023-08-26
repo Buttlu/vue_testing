@@ -1,5 +1,5 @@
 <script lang="ts">
-import { bitlyKey } from '../assets/apikeys.js';
+import { bitlyKey } from '../assets/ownapikeys.js';
 export default {
     data: function () {
         return {
