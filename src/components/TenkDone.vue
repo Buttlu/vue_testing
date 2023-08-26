@@ -12,6 +12,7 @@ onMounted(() => {
 function savePlayers(savePlayers: boolean) {  
   if (savePlayers) {
     let playerNames: string[] = [];
+    // @ts-ignore
     players.value.forEach(x => {
       playerNames.push(x.name);
     });

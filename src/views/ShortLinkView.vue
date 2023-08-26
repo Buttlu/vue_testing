@@ -1,9 +1,10 @@
 <script lang="ts">
+import { bitlyKey } from '../assets/apikeys.js';
 export default {
     data: function () {
         return {
             url: "",
-            token: '161f899846a11dbb84d8c5d3209b50ce2579bb6d',
+            token: bitlyKey,
             error: "",
             groupID: '',
             showError: false,
