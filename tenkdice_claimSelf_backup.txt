@@ -112,6 +112,7 @@ function render() {
 //#region point-checking
 function checkPoints(nums: number[]) {
   let tempPoints = 0;
+  nums;
   let done = false;
   if (nums.length == 6) {
     tempPoints += ladder(nums.sort());
@@ -125,23 +126,8 @@ function checkPoints(nums: number[]) {
   }
 
   nums.forEach(x => {
-    if (x == 1 && !remove1.value) {
-      tempPoints += 100;
-      dice.value.forEach(x => {
-        if (x.value.num == 1) {
-          stopReRoll(x.value.n_value);
-        }
-      })
-    }
-    else if (x == 5 && !remove5.value) {
-      tempPoints += 50;
-      
-      dice.value.forEach(x => {
-        if (x.value.num == 5) {
-          stopReRoll(x.value.n_value);
-        }
-      })
-    }
+    if (x == 1 && !remove1.value) tempPoints += 100;
+    else if (x == 5 && !remove5.value) tempPoints += 50;
   })
   if (tempPoints == 0) {
     fail.value = true;
@@ -163,11 +149,6 @@ function ladder(nums: number[]) {
     remove1.value = true;
     remove5.value = true;
   }
-  if (matching) {
-    for (let i = 1; i <= 6; i++) {
-      stopReRoll(i);
-    }
-  }
   return matching? 1500 : 0;
 }
 //only works with sorted nums
@@ -177,11 +158,7 @@ function five_pair(nums: number[]){
   if (matching) {
     if (nums.includes(1)) remove1.value = true;
     if (nums.includes(5)) remove5.value = true;
-    for (let i = 1; i <= 6; i++) {
-      stopReRoll(i);
-    }
   }
-  
   return matching? 500 : 0;
 }
 
@@ -213,9 +190,6 @@ function triple(nums: number[]) {
         }
         else returnArr[1] = numToAdd;
       }
-      dice.value.forEach(x => {
-        if (x.value.num == num) stopReRoll(x.value.n_value);
-      })
     }
   }
   return returnArr;
@@ -232,7 +206,7 @@ function stopReRoll(e: number) {
     }
   });
   if (allUsed == 0) {
-    setTimeout(resetDice, 2000, false);
+    setTimeout(resetDice, 500, false);
   }
 }
 
@@ -262,7 +236,8 @@ function resetDice(m_resetScore: boolean) {
   <div class="wrapper">
     <div class="dice-field">
       <div class="pair" v-for="d in dice" :key="d.value.name">
-        <span v-bind:id="d.value.name" class="dice" :class="{ reroll: d.value.reroll, claimed: !d.value.reroll}"></span>        
+        <span v-bind:id="d.value.name" class="dice" :class="{ reroll: d.value.reroll, claimed: !d.value.reroll}"></span>
+        <button @click="stopReRoll(d.value.n_value)" v-if="d.value.reroll">Save</button>
       </div>
     </div>
   </div>

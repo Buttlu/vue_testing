@@ -2,6 +2,3 @@
     sol:
         - count number of rerolls and compare with last roll, if they're the same, deny the new
         - check which numbers won and use them to disable the dice
-- rules box
-- style creation screen
-- "roll" animation (rando numbers like in cpp class)
