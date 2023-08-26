@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import TenkDice from '../components/TenkDice.vue'
 import TenkScore from '../components/TenkScore.vue'
 import TenkPlayers from '../components/TenkRegisterPlayers.vue'
@@ -16,14 +16,9 @@ const currentPlayer = ref(0);
 const over = ref(false);
 const gameover = ref(false);
 
-onMounted(() => {
-  
-})
-
 function recievedPlayers(sent_players: string[]) {
   setupPlayers.value = true;
   playerCount.value = sent_players.length;
-  console.log(`playerCount: ${playerCount.value}`)
   let i = 0;
   sent_players.forEach(x => {
     const obj = ref({
@@ -80,18 +75,7 @@ function endGame() {
     // @ts-ignore
     finishedPlayersSend.value.push(players.value.find(x => x.pos == player) as object);    
   }
-  //finishedPlayersSend.value.sort((a, b) => finishedPlayers.value.indexOf(a) - finishedPlayers.value.indexOf(b));
-  /*
-    have:
-      - array of finishers pos
-      - each object has pos
-
-    add object where player.pos == finishers[pos]
-    how tho
-  */
- 
   finishedPlayersSend.value = sortFinishedPlayers(players.value, finishedPlayers.value);
-  console.log(`1: ${finishedPlayersSend.value}`);
   gameover.value = true;
 }
 
@@ -177,7 +161,7 @@ function tooManyPoints() {
 .TenkPlayers {
   background-color: var(--color-background);
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 99;
   position: absolute;
 }
