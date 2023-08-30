@@ -81,7 +81,7 @@ function calcPoints(p: number[]): number {
   }
 
   .score {
-    $height: 25em;
+    $height: 82%;
     height: $height;
     max-height: $height;
     min-height: $height;
