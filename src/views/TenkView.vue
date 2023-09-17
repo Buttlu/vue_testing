@@ -4,6 +4,8 @@ import TenkDice from '../components/TenkDice.vue'
 import TenkScore from '../components/TenkScore.vue'
 import TenkPlayers from '../components/TenkRegisterPlayers.vue'
 import TenkDone from '../components/TenkDone.vue'
+// @ts-ignore
+import { currentPlayer } from '../assets/cPlayer.js'
 
 const players = ref([] as object[]);
 const finishedPlayers = ref([] as number[]);
@@ -12,9 +14,10 @@ const playerCount = ref(0);
 const setupPlayers = ref(false);
 const contd = ref(false);
 const playedScore = ref(0);
-const currentPlayer = ref(0);
+//const currentPlayer = ref(0);
 const over = ref(false);
 const gameover = ref(false);
+
 
 function recievedPlayers(sent_players: string[]) {
   setupPlayers.value = true;
@@ -38,17 +41,17 @@ function gotScore(score: number) {
   contd.value = true;
   if (score > 0) {
     // @ts-ignore
-    const totalScore = players.value[currentPlayer.value].scores.reduce((total: any, num: any) => total + num, 0) + score;
+    const totalScore = players.value[currentPlayer.current].scores.reduce((total: any, num: any) => total + num, 0) + score;
     if (totalScore > 10000) {
       tooManyPoints();
       return;
     } else if (totalScore == 10000) {
-      finishedPlayers.value.push(currentPlayer.value);
+      finishedPlayers.value.push(currentPlayer.current);
     }
     // @ts-ignore
-    players.value[currentPlayer.value].scores.push(score);
+    players.value[currentPlayer.current].scores.push(score);
     // @ts-ignore
-    players.value[currentPlayer.value].isIn = true;
+    players.value[currentPlayer.current].isIn = true;
   }
   nextPlayer();
 }
@@ -58,8 +61,9 @@ function nextPlayer() {
     endGame();
     return;
   }
-  currentPlayer.value = (currentPlayer.value+1) % playerCount.value;  
-  if (finishedPlayers.value.includes(currentPlayer.value)) {
+  currentPlayer.current = (currentPlayer.current+1) % playerCount.value;
+  console.log(currentPlayer.current);
+  if (finishedPlayers.value.includes(currentPlayer.current)) {
     nextPlayer();
   }
 }
@@ -102,14 +106,14 @@ function tooManyPoints() {
     <!-- @vue-skip -->
     <div class="current-player" v-if="setupPlayers && !gameover"> 
       <span class="name">Currently playing</span>
-      <span class="player" v-if="!over">{{ players[currentPlayer].name }}</span>
+      <span class="player" v-if="!over">{{ players[currentPlayer.current].name }}</span>
       <span class="player" v-if="over">Too many points, you need EXACTLY 10'000 points</span>
       
     </div>
   </div>
   <div class="wrapper" v-if="!gameover">
     <div class="score-wrapper">
-      <TenkScore :recieved_players="players" v-if="setupPlayers && !gameover"/>
+      <TenkScore :recieved_players="players" :current_player="currentPlayer.current" v-if="setupPlayers && !gameover"/>
     </div>
     <div class="dice-wrapper" v-if="setupPlayers && !gameover">
       <TenkDice :player_status="playerCount" @send-score="gotScore" />

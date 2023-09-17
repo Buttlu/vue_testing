@@ -47,6 +47,7 @@ const remove1 = ref(false);
 const remove5 = ref(false);
 const resetScore = ref(false);
 const errorMsg = ref('');
+const disableButton = ref(false);
 
 const emit = defineEmits(['send-score']);
 const props = defineProps(['player_status']);
@@ -232,11 +233,13 @@ function stopReRoll(e: number) {
     }
   });
   if (allUsed == 0) {
+    disableButton.value = true;
     setTimeout(resetDice, 2000, false);
   }
 }
 
 function failedTurn() {
+  disableButton.value = true;
   setTimeout(() => {
     score.value = 0;
     resetDice(true);
@@ -251,6 +254,7 @@ function resetDice(m_resetScore: boolean) {
   if (m_resetScore) {
     resetScore.value = m_resetScore;
   }
+  disableButton.value = false;
 }
 </script>
 
@@ -267,7 +271,8 @@ function resetDice(m_resetScore: boolean) {
     </div>
   </div>
   <div id="reroll">
-    <button @click="reRoll()">Roll dice</button>
+    <button @click="reRoll()" v-if="!disableButton">Roll dice</button>
+    <button v-if="disableButton" id="disable-button">Roll dice</button>
   </div>
 </template>
 
@@ -329,6 +334,9 @@ h2 {
     width: 100%;
     height: 4em;
     margin-top: 1em;
+  }
+  #disable-button {
+    opacity: 40%;
   }
 }
 </style>

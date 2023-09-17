@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref, onUpdated } from 'vue'
+import { ref, onUpdated, onMounted } from 'vue'
+// @ts-ignore
+import { currentPlayer } from '../assets/cPlayer.js'
 
-const props = defineProps(['recieved_players']);
+const props = defineProps(['recieved_players', 'current_player']);
 
 const players = ref(props['recieved_players']);
 const playerCount: number = players.value.length;
+//const currentPlayer = ref(props['current_player']);
 
 onUpdated(() => {
-  const scoreLists = document.querySelectorAll('.score') as NodeListOf<Element>;
+  const scoreLists: NodeListOf<Element> = document.querySelectorAll('.score');
   scoreLists.forEach(scoreList => {
     let top = scoreList.scrollHeight;
     scoreList.scrollTo({
@@ -16,7 +19,20 @@ onUpdated(() => {
       behavior: 'smooth'
     })
   });
+  
+  console.log(currentPlayer.current);
 })
+
+onMounted(() => {
+  //console.log(players.value);
+  console.log(currentPlayer.current);
+  //console.log(players.value[currentPlayer.current]);
+});
+
+function oneColumn() {
+  const minWidth = 800;
+  return window.outerWidth > minWidth;
+}
 
 function calcPoints(p: number[]): number {
   return p.reduce((total: any, num: any) => total + num, 0);
@@ -25,32 +41,70 @@ function calcPoints(p: number[]): number {
 </script>
 
 <template>
-  <div class="list-wrapper" v-for="p in players" :key="p">
-    <div class="head">{{ p.name }}</div>
-    <div class="score">
-      <ul>
-        <li v-for="s in p.scores" :key="s">
-          <span>{{ s }}</span>
-        </li>
-      </ul>
+  <template v-if="oneColumn()">
+    <div class="list-wrapper" v-for="p in players" :key="p">
+      <div class="head">{{ p.name }}</div>
+      <div class="score">
+        <ul>
+          <li v-for="s in p.scores" :key="s">
+            <span>{{ s }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="remaining-score">
+        Needed: {{ 10000 - calcPoints(p.scores) }}
+      </div>
+      <div class="total-score" :class="{ 'won': calcPoints(p.scores) == 10000 }">
+        Total: {{ calcPoints(p.scores) }}
+      </div>
     </div>
-    <div class="remaining-score">
-      Needed: {{ 10000 - calcPoints(p.scores) }}
+  </template>
+
+  <template v-if="!oneColumn()">
+    <div class="list-wrapper">
+      <div class="head">{{ players[currentPlayer.current].name }}</div>
+      <div class="score">
+        <ul>
+          <li v-for="s in players[currentPlayer.current].scores" :key="s">
+            <span>{{ s }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="remaining-score">
+        Needed: {{ 10000 - calcPoints(players[currentPlayer.current].scores) }}
+      </div>
+      <div class="total-score" :class="{ 'won': calcPoints(players[currentPlayer.current].scores) == 10000 }">
+        Total: {{ calcPoints(players[currentPlayer.current].scores) }}
+      </div>
     </div>
-    <div class="total-score" :class="{ 'won': calcPoints(p.scores) == 10000 }">
-      Total: {{ calcPoints(p.scores) }}
-    </div>
-  </div>
+  </template>
 </template>
 
 <style scoped lang="scss">
 @use '../assets/base.css';
+
+@function list_width() {
+  @if v-bind(oneColumn()) {
+    @return calc((100%/v-bind(playerCount)));
+  } @else {
+    @return 100%;
+  }
+}
+
 .list-wrapper {
-  width: calc((100%/v-bind(playerCount)));
+  width: 100%;
   position: relative;
   border-bottom: .2em solid var(--color-border);
   height: 100%;
   
+  &:last-of-type {
+    border-right: .2em solid var(--color-border);
+  }
+
+  &:first-of-type {
+    border-left: .2em solid var(--color-border);
+  }
+
   + .list-wrapper {
     border-left: .2em solid var(--color-border);
   }
@@ -85,6 +139,7 @@ function calcPoints(p: number[]): number {
     height: $height;
     max-height: $height;
     min-height: $height;
+    width: list_width();
     overflow-y: auto;
     scrollbar-gutter: stable;
     scroll-snap-type: y mandatory;
@@ -115,13 +170,5 @@ function calcPoints(p: number[]): number {
     font-size: 10pt;
     border-top: .3em solid var(--color-border);
   }
-}
-
-.list-wrapper:last-of-type {
-  border-right: .2em solid var(--color-border);
-}
-
-.list-wrapper:first-of-type {
-  border-left: .2em solid var(--color-border);
 }
 </style>

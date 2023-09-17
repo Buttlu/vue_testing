@@ -9,7 +9,6 @@ const emit = defineEmits(['send-players']);
 onMounted(() => {
   let savedPlayers = localStorage.getItem('save_players');
   if (savedPlayers != null) players.value = JSON.parse(savedPlayers);
-  console.log(`players: ${players.value} ; savedPlayers: ${savedPlayers}`);
   localStorage.removeItem('save_players');
 })
 
