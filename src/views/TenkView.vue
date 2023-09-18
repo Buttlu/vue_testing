@@ -62,7 +62,6 @@ function nextPlayer() {
     return;
   }
   currentPlayer.current = (currentPlayer.current+1) % playerCount.value;
-  console.log(currentPlayer.current);
   if (finishedPlayers.value.includes(currentPlayer.current)) {
     nextPlayer();
   }

@@ -19,8 +19,6 @@ onUpdated(() => {
       behavior: 'smooth'
     })
   });
-  
-  console.log(currentPlayer.current);
 })
 
 onMounted(() => {
@@ -29,8 +27,10 @@ onMounted(() => {
   //console.log(players.value[currentPlayer.current]);
 });
 
-function oneColumn() {
-  const minWidth = 800;
+function oneColumn(): boolean {
+  const minWidth = 900;
+  window.outerWidth > minWidth? document.documentElement.style.setProperty("--height", "82%") 
+                                : document.documentElement.style.setProperty("--height", "70%");
   return window.outerWidth > minWidth;
 }
 
@@ -82,15 +82,9 @@ function calcPoints(p: number[]): number {
 
 <style scoped lang="scss">
 @use '../assets/base.css';
-
-@function list_width() {
-  @if v-bind(oneColumn()) {
-    @return calc((100%/v-bind(playerCount)));
-  } @else {
-    @return 100%;
-  }
+:root {
+  --height: 82%;
 }
-
 .list-wrapper {
   width: 100%;
   position: relative;
@@ -116,6 +110,8 @@ function calcPoints(p: number[]): number {
   li {
     list-style-type: none;
     padding: 0 1em;
+    width: 100%;
+    text-align: center;
 
     + li {
       border-top: .15em solid var(--color-border);
@@ -134,12 +130,12 @@ function calcPoints(p: number[]): number {
     background-color: var(--vt-c-green);
   }
 
-  .score {
-    $height: 82%;
-    height: $height;
-    max-height: $height;
-    min-height: $height;
-    width: list_width();
+  .score {    
+    height: var(--height);
+    max-height: var(--height);
+    min-height: var(--height);
+    /*width: calc((100%/v-bind(playerCount)));*/
+    width: 100%;    
     overflow-y: auto;
     scrollbar-gutter: stable;
     scroll-snap-type: y mandatory;

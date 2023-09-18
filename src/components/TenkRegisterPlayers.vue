@@ -76,12 +76,14 @@ p {
 .setPlayers {
   display: flex;
   justify-content: space-evenly;
+  flex-direction: row;
   overflow-y: hidden;  
   max-height: 85%;
 }
 .playerbox, .rulesbox {
   background-color: var(--color-background-soft);
   width: 40%;
+  min-width: 20em;
   margin-top: 2em;
   height: 90%;
   border-radius: 20px;
@@ -141,5 +143,16 @@ p {
 .rulesbox {
   overflow-y: scroll;
   border-radius: 20px 0px 0 20px;
+}
+@media screen and (max-width: 900px) {
+  /*.setPlayers {
+    flex-direction: column;    
+  }*/
+  .playerbox, .rulesbox {
+    margin: 0 auto;
+  }
+  #send {
+    height: 3em;
+  }
 }
 </style>
